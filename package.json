@@ -1,0 +1,19 @@
+{
+  "name": "just-dial-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-ejs-layouts": "^2.5.1",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.7"
+  },
+  "type": "module"
+}
