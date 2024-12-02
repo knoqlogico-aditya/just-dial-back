@@ -1,37 +1,39 @@
-// const locationInput = document.getElementById('locationBox');
-//         const suggestionsBox = document.getElementById('suggestions');
-
-//         locationInput.addEventListener('input', async () => {
-//             const query = locationInput.value.trim();
-//             if (query.length < 3) {
-//                 suggestionsBox.innerHTML = '';
-//                 return;
-//             }
-
-//             try {
-//                 const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
-//                 const suggestions = await response.json();
-
-//                 // Clear previous suggestions
-//                 suggestionsBox.innerHTML = '';
-
-//                 suggestions.forEach(suggestion => {
-//                     const div = document.createElement('div');
-//                     div.textContent = suggestion.name;
-//                     div.addEventListener('click', () => {
-//                         locationInput.value = suggestion.name;
-//                         suggestionsBox.innerHTML = '';
-//                     });
-//                     suggestionsBox.appendChild(div);
-//                 });
-//             } catch (error) {
-//                 console.error('Error fetching suggestions:', error);
-//             }
-//         });
-
-//         // Close suggestions if clicked outside
-//         document.addEventListener('click', (e) => {
-//             if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
-//                 suggestionsBox.innerHTML = '';
-//             }
-//         });
+$(document).ready(function(){
+    $(".testimonial-slider").slick({
+        infinite: true,
+        centerMode: true,
+        autoplay: true,
+        slidesToShow: 5,
+        slidesToScroll: 3,
+        autoplaySpeed: 1500,
+        prevArrow: '<button type="button" class="slick-prev">←</button>',
+        nextArrow: '<button type="button" class="slick-next">→</button>',
+        responsive: [
+            {
+                breakpoint: 1440,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 991,
+                settings: {
+                    slidesToShow: 2,
+                    centerMode: false
+                }
+            },
+            {
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
+});

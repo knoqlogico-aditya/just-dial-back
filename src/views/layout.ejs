@@ -11,7 +11,8 @@
 
     <!-- Optional custom styles -->
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
         }
@@ -24,6 +25,13 @@
     <link rel="stylesheet" href="assets/css/flaticon.css">
     <!-- for api location -->
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <!-- flaticon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- slick.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    
+    
 
 </head>
 
@@ -39,20 +47,23 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    
+
                     <div class="input-search-container">
                         <form class="d-flex " action="/show-business" method="post">
-                        
-                            <input class="form-control me-2" type="text" placeholder="Enter Location" id="locationBox" name="location">
-                            <input class="form-control me-2" type="text" placeholder="Search..." id="searchBar" name="business">
+
+                            <input class="form-control me-2" type="text" placeholder="Enter Location" id="locationBox"
+                                name="location">
+                            <input class="form-control me-2" type="text" placeholder="Search..." id="searchBar"
+                                name="business">
                             <div id="suggestions"></div>
 
-                            
-                            <button class="btn btn-primary d-flex" type="submit" id="searchBtn">Search <i data-feather="search"></i></button>
+
+                            <button class="btn btn-primary d-flex" type="submit" id="searchBtn">Search <i
+                                    data-feather="search"></i></button>
                         </form>
 
                     </div>
-                    
+
                     <div class="collapse navbar-collapse" id="navbar-menu">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
@@ -64,77 +75,83 @@
                         </ul>
                     </div>
 
-                    
+
                 </div>
             </nav>
         </div>
     </section>
     <%- body %>
 
-    <div class="container mt-4">
-        
-    </div>
+        <div class="container mt-4">
 
-    <!-- Popper.js and Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        </div>
 
-    <!-- Feather Icons -->
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script>
-        feather.replace();
-    </script>
+        <!-- Popper.js and Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+            integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+            crossorigin="anonymous"></script>
 
-<script>
-    const locationInput = document.getElementById('locationBox');
-    const suggestionsBox = document.getElementById('suggestions');
+        <!-- Feather Icons -->
+        <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+        <script>
+            feather.replace();
+        </script>
 
-    // Show suggestions dynamically based on user input
-    locationInput.addEventListener('input', async () => {
-        const query = locationInput.value.trim();
-        if (query.length < 3) {
-            suggestionsBox.style.display = 'none'; // Hide if query is too short
-            suggestionsBox.innerHTML = '';
-            return;
-        }
+        <script>
+            const locationInput = document.getElementById('locationBox');
+            const suggestionsBox = document.getElementById('suggestions');
 
-        try {
-            const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
-            const suggestions = await response.json();
+            // Show suggestions dynamically based on user input
+            locationInput.addEventListener('input', async () => {
+                const query = locationInput.value.trim();
+                if (query.length < 3) {
+                    suggestionsBox.style.display = 'none'; // Hide if query is too short
+                    suggestionsBox.innerHTML = '';
+                    return;
+                }
 
-            suggestionsBox.innerHTML = ''; // Clear previous suggestions
-            if (suggestions.length > 0) {
-                suggestionsBox.style.display = 'block'; // Show dropdown
+                try {
+                    const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
+                    const suggestions = await response.json();
 
-                suggestions.forEach(suggestion => {
-                    const div = document.createElement('div');
-                    div.textContent = suggestion.name;
-                    div.classList.add('suggestion-item'); // Add class for styling
-                    div.addEventListener('click', () => {
-                        locationInput.value = suggestion.name;
-                        suggestionsBox.style.display = 'none'; // Hide on selection
-                        suggestionsBox.innerHTML = ''; // Clear dropdown
-                    });
-                    suggestionsBox.appendChild(div);
-                });
-            } else {
-                suggestionsBox.style.display = 'none'; // Hide if no suggestions
-            }
-        } catch (error) {
-            console.error('Error fetching suggestions:', error);
-        }
-    });
+                    suggestionsBox.innerHTML = ''; // Clear previous suggestions
+                    if (suggestions.length > 0) {
+                        suggestionsBox.style.display = 'block'; // Show dropdown
 
-    // Hide suggestions box when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
-            suggestionsBox.style.display = 'none'; // Hide on outside click
-            suggestionsBox.innerHTML = ''; // Clear suggestions
-        }
-    });
-</script>
+                        suggestions.forEach(suggestion => {
+                            const div = document.createElement('div');
+                            div.textContent = suggestion.name;
+                            div.classList.add('suggestion-item'); // Add class for styling
+                            div.addEventListener('click', () => {
+                                locationInput.value = suggestion.name;
+                                suggestionsBox.style.display = 'none'; // Hide on selection
+                                suggestionsBox.innerHTML = ''; // Clear dropdown
+                            });
+                            suggestionsBox.appendChild(div);
+                        });
+                    } else {
+                        suggestionsBox.style.display = 'none'; // Hide if no suggestions
+                    }
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
+            });
 
+            // Hide suggestions box when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
+                    suggestionsBox.style.display = 'none'; // Hide on outside click
+                    suggestionsBox.innerHTML = ''; // Clear suggestions
+                }
+            });
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
+        <script src="main.js"></script>
 </body>
 
 </html>
