@@ -30,8 +30,8 @@
     <!-- slick.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
-    
-    
+
+
 
 </head>
 
@@ -51,11 +51,13 @@
                     <div class="input-search-container">
                         <form class="d-flex " action="/show-business" method="post">
 
-                            <input class="form-control me-2" type="text" placeholder="Enter Location" id="locationBox"
-                                name="location">
+                            <input class="form-control me-2 location-input" type="text" placeholder="Enter Location"
+                                id="locationBox" name="location">
+                            <div id="suggestions-box"></div>
+
                             <input class="form-control me-2" type="text" placeholder="Search..." id="searchBar"
                                 name="business">
-                            <div id="suggestions"></div>
+
 
 
                             <button class="btn btn-primary d-flex" type="submit" id="searchBtn">Search <i
@@ -101,52 +103,61 @@
         </script>
 
         <script>
-            const locationInput = document.getElementById('locationBox');
+            const locationInputs = document.querySelectorAll('.location-input');
             const suggestionsBox = document.getElementById('suggestions');
 
-            // Show suggestions dynamically based on user input
-            locationInput.addEventListener('input', async () => {
-                const query = locationInput.value.trim();
-                if (query.length < 3) {
-                    suggestionsBox.style.display = 'none'; // Hide if query is too short
-                    suggestionsBox.innerHTML = '';
-                    return;
-                }
 
-                try {
-                    const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
-                    const suggestions = await response.json();
+            // Add event listener to each input field
+            locationInputs.forEach(locationInput => {
+                const suggestionsBox = document.createElement('div'); // Create a separate suggestions box for each input
+                suggestionsBox.classList.add('suggestions-box'); // Add a class for styling
+                locationInput.parentNode.appendChild(suggestionsBox); // Append it to the parent of the input
 
-                    suggestionsBox.innerHTML = ''; // Clear previous suggestions
-                    if (suggestions.length > 0) {
-                        suggestionsBox.style.display = 'block'; // Show dropdown
-
-                        suggestions.forEach(suggestion => {
-                            const div = document.createElement('div');
-                            div.textContent = suggestion.name;
-                            div.classList.add('suggestion-item'); // Add class for styling
-                            div.addEventListener('click', () => {
-                                locationInput.value = suggestion.name;
-                                suggestionsBox.style.display = 'none'; // Hide on selection
-                                suggestionsBox.innerHTML = ''; // Clear dropdown
-                            });
-                            suggestionsBox.appendChild(div);
-                        });
-                    } else {
-                        suggestionsBox.style.display = 'none'; // Hide if no suggestions
+                locationInput.addEventListener('input', async () => {
+                    const query = locationInput.value.trim();
+                    if (query.length < 3) {
+                        suggestionsBox.style.display = 'none'; // Hide if query is too short
+                        suggestionsBox.innerHTML = '';
+                        return;
                     }
-                } catch (error) {
-                    console.error('Error fetching suggestions:', error);
-                }
+
+                    try {
+                        const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
+                        const suggestions = await response.json();
+
+                        suggestionsBox.innerHTML = ''; // Clear previous suggestions
+                        if (suggestions.length > 0) {
+                            suggestionsBox.style.display = 'block'; // Show dropdown
+
+                            suggestions.forEach(suggestion => {
+                                const div = document.createElement('div');
+                                div.textContent = suggestion.name;
+                                div.classList.add('suggestion-item'); // Add class for styling
+                                div.addEventListener('click', () => {
+                                    locationInput.value = suggestion.name;
+                                    suggestionsBox.style.display = 'none'; // Hide on selection
+                                    suggestionsBox.innerHTML = ''; // Clear dropdown
+                                });
+                                suggestionsBox.appendChild(div);
+                            });
+                        } else {
+                            suggestionsBox.style.display = 'none'; // Hide if no suggestions
+                        }
+                    } catch (error) {
+                        console.error('Error fetching suggestions:', error);
+                    }
+                });
+
+                // Hide suggestions box when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
+                        suggestionsBox.style.display = 'none'; // Hide on outside click
+                        suggestionsBox.innerHTML = ''; // Clear suggestions
+                    }
+                });
             });
 
-            // Hide suggestions box when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
-                    suggestionsBox.style.display = 'none'; // Hide on outside click
-                    suggestionsBox.innerHTML = ''; // Clear suggestions
-                }
-            });
+
         </script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>

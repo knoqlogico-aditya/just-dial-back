@@ -15,6 +15,22 @@ body {
     --secondary-font-color: #343a3f;
     --greyish-background: #F8FAFB;
 }
+html, body {
+    
+    height: 100%;
+    overflow: auto;
+}
+
+.top-area{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+}
+.navbar{
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+
+}
 /* common classes */
 .section-header{
     text-align: center;
@@ -40,6 +56,10 @@ body {
 
 .input-search-container {
     position: relative;
+    /* display: none; */
+}
+.input-group{
+    position: relative;
 }
 /* hero */
 .welcome-hero{
@@ -61,6 +81,9 @@ body {
     background: rgba(65, 73, 89, .65);
     z-index: -1;
 }
+.welcome-hero-text{
+    padding-top: 155px;
+}
 .welcome-hero-text h2{
     font-size: 48px;
     color: #fff;
@@ -74,6 +97,9 @@ body {
     font-size: 18px;
     color: #fcfcfc;
     margin-top: 25px;
+}
+.welcome-hero-search-box{
+    margin-top: 70px;
 }
 /* list topic content */
 .list-topics{
@@ -111,17 +137,21 @@ body {
     text-decoration: none;
 }
 /* location suggestions */
-#suggestions div {
+.suggestions-box{
+    position: absolute;
+}
+.suggestions-box div {
+
     padding: 8px;
     cursor: pointer;
     border-bottom: 1px solid #ddd;
 }
 
-#suggestions div:hover {
+.suggestions-box div:hover {
     background-color: #f0f0f0;
 }
 
-#suggestions {
+.suggestions-box {
     display: none;
     top: 100%;
     left: 0;
@@ -161,22 +191,30 @@ body {
     padding: 117px 0 95px;
     background-color: var(--greyish-background);
 }
+.explore-content{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.explore-content div{
+    flex: 0 0 calc(33.33% - 14px);
+}
 /* reviews section */
 .reviews{
     padding: 117px 0 95px;
 }
 .testimonial-slider {
-    max-width: 1200px;
-    margin: 0 auto;
+    
     
     display: flex;
 }
 .testimonial-box {
-    padding: 20px;
+    padding: 50px 30px;
     background: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    box-shadow:  0 0px 5px rgba(71,71,71,.2);
+    
     text-align: center;
+    margin: 10px 10px;
 }
 .testimonial-img img {
     width: 80px;
@@ -191,10 +229,22 @@ body {
     font-style: italic;
     color: #6c757d;
 }
+.slick-slide{
+    transition: all ease-in-out .3s;
+    opacity: 0.5;
+}
+.slick-active {
+    opacity: .5;
+  }
+  .slick-current {
+    opacity: 1;
+  }
 /* static */
 .statistics{
     position: relative;
-    background: url(images/counter/counter-banner.jpg);
+    background: url(images/counter/counter-banner.jpg) no-repeat fixed;
+    background-position: center;
+    background-size: cover;
     padding: 127px 0 120px;
     z-index: 1;
 }
