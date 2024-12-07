@@ -44,7 +44,9 @@ html, body {
     font-size: 16px;
     color: var(--secondary-font-color);
 }
-
+#searchBtn{
+    font-size: 14px;
+}
 #searchBtn svg {
     font-size: 14px;
 }
@@ -192,12 +194,61 @@ html, body {
     background-color: var(--greyish-background);
 }
 .explore-content{
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+   margin: auto;
 }
-.explore-content div{
+.explore-content .card{
     flex: 0 0 calc(33.33% - 14px);
+}
+.single-explore-item{
+    background: #fff;
+    border: 1px solid #edeff1;
+    border-radius: 3px;
+    transition: .3s linear;
+}
+.single-explore-img img{
+    border: none;
+    width: 100%;
+    height: auto;
+}
+.single-explore-txt{
+    padding: 20px;
+}
+.single-explore-txt h2{
+    margin: 0;
+    color: #343a3f;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: capitalize;
+
+}
+.explore-rating, .explore-rating a {
+    font-size: 12px;
+    color: #777f85;
+    text-transform: capitalize;
+    font-weight: 400;
+    margin: 15px 0 20px;
+    text-decoration: none;
+}
+.explore-rating-container, .explore-rating-container a{
+    font-size: 12px;
+    color: #777f85;
+    text-transform: capitalize;
+    font-weight: 400;
+    margin: 15px 0 20px;
+    text-decoration: none;
+}
+
+.explore-rating{
+    display: inline-block;
+    width: 32px;
+    height: 20px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    font-weight: 500;
+    margin-right: 10px;
+    background-color: #00c61c;
 }
 /* reviews section */
 .reviews{

@@ -1,0 +1,24 @@
+@media screen and (max-width: 767px) {
+    .welcome-hero-text {
+        padding-top: 80px;
+    }
+    .welcome-hero-text h2 {
+        font-size: 24px;
+    }
+    .welcome-hero-search-box form{
+        display: flex;
+        flex-direction: column;
+    }
+    .welcome-hero-search-box button{
+        height: 70px;
+    }
+    .list-topic-content{
+        margin-top: 60px;
+        justify-content: center;
+    }
+    .single-list-topic-content{
+         min-width: 205px;
+         
+        
+    }
+}

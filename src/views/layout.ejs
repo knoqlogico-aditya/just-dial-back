@@ -18,6 +18,7 @@
         }
     </style>
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/responsive.css">
     <script src="main.js"></script>
 
 
@@ -50,10 +51,12 @@
 
                     <div class="input-search-container">
                         <form class="d-flex " action="/show-business" method="post">
+                            <div class="input-group">
+                                <input class="form-control me-2 location-input" type="text" placeholder="Enter Location"
+                                    id="locationBox" name="location">
+                                <div id="suggestions-box"></div>
+                            </div>
 
-                            <input class="form-control me-2 location-input" type="text" placeholder="Enter Location"
-                                id="locationBox" name="location">
-                            <div id="suggestions-box"></div>
 
                             <input class="form-control me-2" type="text" placeholder="Search..." id="searchBar"
                                 name="business">
@@ -104,7 +107,7 @@
 
         <script>
             const locationInputs = document.querySelectorAll('.location-input');
-            const suggestionsBox = document.getElementById('suggestions');
+            // const suggestionsBox = document.getElementById('suggestions');
 
 
             // Add event listener to each input field
@@ -124,6 +127,8 @@
                     try {
                         const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
                         const suggestions = await response.json();
+                        console.log('Suggestions:', suggestions); // Ensure the suggestions array has data
+
 
                         suggestionsBox.innerHTML = ''; // Clear previous suggestions
                         if (suggestions.length > 0) {
@@ -135,6 +140,17 @@
                                 div.classList.add('suggestion-item'); // Add class for styling
                                 div.addEventListener('click', () => {
                                     locationInput.value = suggestion.name;
+
+                                    // Store latitude and longitude for further use
+                                    const selectedLat = suggestion.lat;
+                                    const selectedLng = suggestion.lng;
+
+                                    console.log('Selected Location:', {
+                                        name: suggestion.name,
+                                        latitude: selectedLat,
+                                        longitude: selectedLng,
+                                    });
+
                                     suggestionsBox.style.display = 'none'; // Hide on selection
                                     suggestionsBox.innerHTML = ''; // Clear dropdown
                                 });
