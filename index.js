@@ -2,16 +2,24 @@ import express from "express";
 import ejsLayouts from "express-ejs-layouts";
 import path from 'path';
 import BusinessController from "./src/controllers/business.controller.js"
+import route from './src/routes/routes.js'
+import session from 'express-session';
+
 
 
 const server = express();
-server.use(express.static('public'));
-
 const PORT = "3100";
 
+// middleware
+server.use(express.static('public'));
 server.use(express.urlencoded({ extended: true }));
 
-
+server.use(session({
+    secret: process.env.SESSION_SECRET,       // Replace with a secure key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }        // Set `true` for HTTPS
+}));
 
 server.set('view engine', 'ejs');
 server.set('views', path.join(path.resolve(), 'src', 'views'))
@@ -19,9 +27,13 @@ server.use(ejsLayouts);
 
 
 const businessController = new BusinessController();
-server.get("/", businessController.showHome)
-server.post('/show-business', businessController.showBusiness)
 
+server.use('/', route);
+
+// Default route
+server.get('/', (req, res) => {
+    res.render('login', { message: null });
+  });
 server.get('/api/location', async (req, res) => {
     const query = req.query.q;
     if (!query) {

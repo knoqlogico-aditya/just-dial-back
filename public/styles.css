@@ -139,8 +139,9 @@ html, body {
     text-decoration: none;
 }
 /* location suggestions */
-.suggestions-box{
+#suggestions-box{
     position: absolute;
+    display: none;
 }
 .suggestions-box div {
 
@@ -290,6 +291,12 @@ html, body {
   .slick-current {
     opacity: 1;
   }
+  .slick-list{
+    overflow: hidden;
+  }
+  .slick-track{
+    width: 100%;
+  }
 /* static */
 .statistics{
     position: relative;
@@ -321,4 +328,340 @@ html, body {
     font-size: 18px;
     text-transform: capitalize;
     font-weight: 500;
+}
+/* blog */
+.blog{
+    padding: 117px 0 95px;
+}
+.single-blog-item {
+    box-shadow: 0 0px 5px rgba(71, 71, 71, .2);
+    transition: .3s;
+}
+.single-blog-item-img img{
+    border: none;
+    width: 100%;
+    height: auto;
+}
+.single-blog-item-txt {
+    padding: 25px 28px 27px;
+}
+
+.single-blog-item-txt h2 a {
+    text-transform: initial;
+    line-height: 1.8;
+    font-size: 18px;
+    text-decoration: none;
+    color: #343a3f;
+}
+.single-blog-item-txt h4 a {
+    text-decoration: none;
+    color: #343a3f;
+}
+.single-blog-item-txt h4 {
+    font-size: 14px;
+    color: #8f949d;
+    font-weight: 400;
+    margin: 12px 0 20px;
+}
+.single-blog-item-txt p {
+    margin: 0;
+    color: #767f86;
+    font-size: 14px;
+    line-height: 1.8;
+    text-transform: initial;
+}
+/* subscrption */
+
+.subscription {
+    background: #f8fafb;
+    padding: 150px 0;
+}
+.subscription-input-group{
+    position: relative;
+    text-align: center;
+    max-width: 630px;
+    margin: 0 auto;
+}
+.subscription-input-form{
+    display: inline-block;
+    width: 630px;
+    height: 60px;
+    padding-left:30px;
+    font-size: 16px;
+}
+.appsLand-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ff545a;
+    display: inline-block;
+    width: 180px;
+    height: 60px;
+    line-height: 60px;
+    text-decoration: none;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    text-transform: capitalize;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    border: 0;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+}
+
+/* ========================================================================== */
+/* for business-login ejs */
+/* Main Content */
+main {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.advertise-section {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.advertise-section >h2 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.advertise-section >h2 span {
+    color: #ff5722;
+    font-weight: bold;
+}
+
+.advertise-section >p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.form {
+    margin-bottom: 20px;
+} 
+
+.form>label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    display: flex;
+    justify-content: center;
+    gap: 10px; 
+}
+
+input#Email {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+div>button {
+    background: #ff5722;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e64a19;
+}
+
+/* Image and Goal Section */
+.container-div {
+    text-align: center;
+    padding: 20px;
+}
+
+.Goal {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.goal-item {
+    text-align: center;
+    max-width: 200px;
+}
+
+.goal-item+img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Footer */
+.foot {
+    background: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    border-top: 2px solid #ccc;
+}
+
+
+.foot a {
+    color: #ff5722;
+    text-decoration: none;
+}
+
+.foot a:hover {
+    text-decoration: underline;
+}
+
+/* Questions Section */
+.questions-section {
+    background: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+textarea#questions {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: vertical;
+}
+
+.submit>btn {
+    background: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit>btn:hover {
+    background: #e64a19;
+}
+/* Grow Business Section */
+.grow-business-section {
+    text-align: center;
+    padding: 20px; 
+    margin: 20px auto; 
+    max-width: 600px; 
+    background: #ffffff; 
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.grow-business-section h1 {
+    font-size: 28px;  
+    margin-bottom: 10px; 
+    color: #333;     
+}
+
+.grow-business-section p {
+    font-size: 18px;       
+    margin-bottom: 20px;   
+    color: #666;
+}
+
+/* Form Styles */
+.form {
+    margin: 20px 0;
+}
+
+.form label {
+    font-size: 16px;        
+    display: block;        
+    margin-bottom: 8px;    
+    color: #333;        
+}
+
+.form-input {
+    display: flex; 
+    align-items: center;
+    gap: 10px; 
+    justify-content: center;
+}
+
+input#email {
+    padding: 10px; 
+    font-size: 16px;
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    flex: 1;
+    max-width: 300px;
+}
+
+.get-started-btn {
+    background: #ff5722; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.get-started-btn:hover {
+    background: #e64a19;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .advertise-section {
+        text-align: center;
+    }
+
+    .Goal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .goal-item {
+        max-width: 100%;
+    }
+
+    .form-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    input#Email {
+        max-width: 100%;
+    }
 }

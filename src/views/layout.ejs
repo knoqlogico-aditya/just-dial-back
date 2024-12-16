@@ -19,11 +19,11 @@
     </style>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/responsive.css">
-    <script src="main.js"></script>
+
 
 
     <!--flaticon.css-->
-    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <!-- <link rel="stylesheet" href="assets/css/flaticon.css"> -->
     <!-- for api location -->
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
     <!-- flaticon -->
@@ -54,7 +54,9 @@
                             <div class="input-group">
                                 <input class="form-control me-2 location-input" type="text" placeholder="Enter Location"
                                     id="locationBox" name="location">
-                                <div id="suggestions-box"></div>
+                                <!-- <div id="suggestions-box">
+                                    <button>location</button>
+                                </div> -->
                             </div>
 
 
@@ -72,7 +74,7 @@
                     <div class="collapse navbar-collapse" id="navbar-menu">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Free Listing</a>
+                                <a class="nav-link" href="business-login">Free Listing</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-primary " href="#" id="new-button">Login/Signup</a>
@@ -107,20 +109,72 @@
 
         <script>
             const locationInputs = document.querySelectorAll('.location-input');
-            // const suggestionsBox = document.getElementById('suggestions');
-
 
             // Add event listener to each input field
             locationInputs.forEach(locationInput => {
-                const suggestionsBox = document.createElement('div'); // Create a separate suggestions box for each input
-                suggestionsBox.classList.add('suggestions-box'); // Add a class for styling
-                locationInput.parentNode.appendChild(suggestionsBox); // Append it to the parent of the input
+                // Create the suggestions box
+                const suggestionsBox = document.createElement('div');
+                suggestionsBox.classList.add('suggestions-box');
+                locationInput.parentNode.appendChild(suggestionsBox);
 
+                // Create the "Get current location" button
+                const getLocationBtn = document.createElement('button');
+                getLocationBtn.textContent = "Get current location";
+                getLocationBtn.classList.add('get-location-btn'); // Fix for adding class
+                getLocationBtn.style.display = "none";
+
+                getLocationBtn.addEventListener('click', async (e) => {
+                    e.preventDefault(); // Prevent default button behavior (e.g., form submission)
+
+                    if (!navigator.geolocation) {
+                        alert('Geolocation is not supported by your browser.');
+                        return;
+                    }
+                    console.log(navigator)
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+                            console.log('Location accessed:', { latitude, longitude });
+                            // You can use these coordinates to fetch location details or set input values
+                            locationInput.value = `Lat: ${latitude}, Lng: ${longitude}`;
+                        },
+                        (error) => {
+                            switch (error.code) {
+                                case error.PERMISSION_DENIED:
+                                    alert('Please allow location permission.');
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    alert('Location information is unavailable.');
+                                    break;
+                                case error.TIMEOUT:
+                                    alert('Request to get location timed out.');
+                                    break;
+                                default:
+                                    alert('An unknown error occurred while accessing location.');
+                            }
+                        }
+                    );
+                });
+
+
+                // Append the button to the suggestions box initially
+                suggestionsBox.appendChild(getLocationBtn);
+
+                // Show the suggestions box and button when the input is focused
+                locationInput.addEventListener('focus', () => {
+                    suggestionsBox.style.display = 'block';
+                    getLocationBtn.style.display = 'inline-block';
+                });
+
+                // Fetch and display suggestions on input
                 locationInput.addEventListener('input', async () => {
                     const query = locationInput.value.trim();
                     if (query.length < 3) {
                         suggestionsBox.style.display = 'none'; // Hide if query is too short
-                        suggestionsBox.innerHTML = '';
+                        clearSuggestions();
                         return;
                     }
 
@@ -129,30 +183,24 @@
                         const suggestions = await response.json();
                         console.log('Suggestions:', suggestions); // Ensure the suggestions array has data
 
+                        clearSuggestions(); // Clear previous suggestions while preserving the button
 
-                        suggestionsBox.innerHTML = ''; // Clear previous suggestions
                         if (suggestions.length > 0) {
                             suggestionsBox.style.display = 'block'; // Show dropdown
 
                             suggestions.forEach(suggestion => {
                                 const div = document.createElement('div');
                                 div.textContent = suggestion.name;
-                                div.classList.add('suggestion-item'); // Add class for styling
+                                div.classList.add('suggestion-item');
                                 div.addEventListener('click', () => {
                                     locationInput.value = suggestion.name;
-
-                                    // Store latitude and longitude for further use
-                                    const selectedLat = suggestion.lat;
-                                    const selectedLng = suggestion.lng;
-
                                     console.log('Selected Location:', {
                                         name: suggestion.name,
-                                        latitude: selectedLat,
-                                        longitude: selectedLng,
+                                        latitude: suggestion.lat,
+                                        longitude: suggestion.lng,
                                     });
-
-                                    suggestionsBox.style.display = 'none'; // Hide on selection
-                                    suggestionsBox.innerHTML = ''; // Clear dropdown
+                                    suggestionsBox.style.display = 'none';
+                                    clearSuggestions();
                                 });
                                 suggestionsBox.appendChild(div);
                             });
@@ -167,11 +215,20 @@
                 // Hide suggestions box when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
-                        suggestionsBox.style.display = 'none'; // Hide on outside click
-                        suggestionsBox.innerHTML = ''; // Clear suggestions
+                        suggestionsBox.style.display = 'none';
+                        clearSuggestions();
                     }
                 });
+
+                // Function to clear suggestions but preserve the button
+                function clearSuggestions() {
+                    suggestionsBox.innerHTML = '';
+                    suggestionsBox.appendChild(getLocationBtn);
+                }
+
             });
+
+
 
 
         </script>
