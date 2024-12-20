@@ -4,6 +4,7 @@ import path from 'path';
 import BusinessController from "./src/controllers/business.controller.js"
 import route from './src/routes/routes.js'
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 
 
@@ -11,6 +12,7 @@ const server = express();
 const PORT = "3100";
 
 // middleware
+server.use(cookieParser());
 server.use(express.static('public'));
 server.use(express.urlencoded({ extended: true }));
 
@@ -24,7 +26,7 @@ server.use(session({
 server.set('view engine', 'ejs');
 server.set('views', path.join(path.resolve(), 'src', 'views'))
 server.use(ejsLayouts);
-
+server.use(express.json());
 
 const businessController = new BusinessController();
 
@@ -59,6 +61,7 @@ server.get('/api/location', async (req, res) => {
         res.status(500).json({ error: "Failed to fetch location suggestions" });
     }
 });
+
 
 
 

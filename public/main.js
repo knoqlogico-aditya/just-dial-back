@@ -161,3 +161,168 @@ pincodeInput.addEventListener('input', async () => {
         additionalFields.classList.add('d-none');
     }
 });
+
+// send otp
+async function sendOtp() {
+    console.log('send otp');
+    const email = document.getElementById('email').value;
+
+    if (!email) {
+        alert('Email is required');
+        return;
+    }
+
+    const button = document.getElementById('sendOtpButton');
+    button.disabled = true;
+    button.textContent = 'Sending...';
+
+    const url = '/send-otp';
+
+    try {
+        // Use await to wait for the fetch request to complete
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+
+        if (res.ok) {
+            // Redirect to verification page if OTP is sent successfully
+            window.location.href = '/verify-otp';
+        } else {
+            // Handle failure
+            alert('Failed to send OTP. Please try again.');
+            button.disabled = false;
+            button.textContent = 'Send OTP';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+        button.disabled = false;
+        button.textContent = 'Send OTP';
+    }
+}
+
+
+async function verifyOtp() {
+    const otp = document.getElementById('otp').value;
+    if (!otp) {
+        alert('Please enter the OTP');
+        return;
+    }
+
+    const url = '/verify-otp';
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ otp })
+
+        })
+        if (res.ok) {
+            const data = await res.json();
+            alert('OTP verified successfully');
+            // Redirect to the appropriate page based on the response
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+
+               
+            } else {
+                const errorData = await res.json();
+                alert(`Failed to verify OTP: ${errorData.message}`);
+            }
+
+        }
+    }
+
+    catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while verifying OTP');
+    }
+
+
+
+}
+async function addNameclient() {
+    const name = document.getElementById('user-name').value;
+    const phone = document.getElementById('user-phone').value;
+    const userType = 'business_owner';
+    
+    if (!name || !phone || !userType) {
+        alert('All fields are required');
+        return;
+    }
+    const url = '/enter-your-details';
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, phone, userType })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            alert('Name added successfully');
+            window.location.href = '/enter-business-details';
+        } else {
+            const errorData = await res.json();
+            alert(`Failed to add name: ${errorData.message}`);
+        }
+    }catch (error) {    
+        console.error('Error:', error);
+        alert('An error occurred while adding name');
+    }
+
+}
+async function addBusinessDetails() {
+    const businessName = document.getElementById('business-name').value;
+    const pincode = document.getElementById('pincode').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+
+    const category = document.getElementById('business-category').value;
+
+    const phone = document.getElementById('phone').value;
+    // const email = document.getElementById('email').value;
+    
+    
+    
+    const latitudeInput = document.getElementById('latitude').value;
+    const longitudeInput = document.getElementById('longitude').value;
+    console.log('latitude================')
+
+    if (!businessName|| !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
+        alert('All fields are required');
+        return;
+    }
+
+    const url = '/list-business';
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            alert('Business details added successfully');
+            window.location.href = '/manage-business';
+        } else {
+            const errorData = await res.json();
+            alert(`Failed to add business: ${errorData.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while adding business details');
+
+    }
+}

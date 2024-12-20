@@ -1,17 +1,24 @@
 <div class="container my-5">
     <h1 class="text-center mb-4">Enter Your Business Details</h1>
-    <form action="/submit-business-details" method="POST">
-
+    <form id="business-details-form">
         <!-- Business Name -->
         <div class="mb-3">
-            <label for="business-name" class="form-label">Business Name</label>
-            <input type="text" class="form-control" id="business-name" name="business-name" required>
+            <label for="name" class="form-label">Business Name</label>
+            <input type="text" class="form-control" id="business-name" name="name" required>
         </div>
+
+        <!-- Email -->
+        <!-- <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div> -->
+
+
 
         <!-- Pincode -->
         <div class="mb-3">
             <label for="pincode" class="form-label">Pincode</label>
-            <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pincode" required>
+            <input type="text" class="form-control" id="pincode" name="pincode" required>
         </div>
 
         <!-- City -->
@@ -26,15 +33,31 @@
             <input type="text" class="form-control" id="state" name="state" required>
         </div>
 
-        <!-- Business Category -->
+        <!-- Category -->
         <div class="mb-3">
-            <label for="business-category" class="form-label">Business Category</label>
-            <input type="text" class="form-control" id="business-category" name="business-category" placeholder="Type Business Category" required>
+            <label for="category" class="form-label">Category</label>
+            <input type="text" class="form-control" id="business-category" name="category" required>
+        </div>
+       
+        <!-- Phone -->
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+
+        <!-- Latitude -->
+        <div class="mb-3">
+            <label for="latitude" class="form-label">Latitude</label>
+            <input type="text" class="form-control" id="latitude" name="latitude" required>
+        </div>
+
+        <!-- Longitude -->
+        <div class="mb-3">
+            <label for="longitude" class="form-label">Longitude</label>
+            <input type="text" class="form-control" id="longitude" name="longitude" required>
         </div>
 
         <!-- Submit Button -->
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary btn-lg">Save and Continue</button>
-        </div>
+        <button type="button" class="btn btn-primary" onclick="addBusinessDetails()">Add Business</button>
     </form>
 </div>

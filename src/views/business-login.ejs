@@ -7,10 +7,10 @@
             <section class="advertise-section">
                 <h2>GROW <span>Your Business</span></h2>
                 <p>Advertise with Justdial - India’s No. 1 Local Search Engine</p>
-                <form action="/send-otp" method="POST">
+                <form>      
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
-                    <button type="submit">Send OTP</button>
+                    <button id="sendOtpButton" type="button" onclick="sendOtp()" >Send OTP</button>
                 </form>
                 <ul>
                     <li>✔ Rank Ahead of Your Competition</li>
@@ -54,7 +54,7 @@
     <div class="form">
         <label for="email">Enter Email ID:</label>
         <div class="form-input">
-            <input type="email" id="email" placeholder="Enter Your Email ID">
+            <input type="email" id="email2" placeholder="Enter Your Email ID">
             <button class="get-started-btn">Get Started →</button>
         </div>
     </div>

@@ -42,7 +42,7 @@
             <!-- Start Navigation -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container mb-2 mt-2">
-                    <a class="navbar-brand" href="index.html">List<span>race</span></a>
+                    <a class="navbar-brand" href="/">List<span>race</span></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
                         aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -73,12 +73,25 @@
 
                     <div class="collapse navbar-collapse" id="navbar-menu">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="business-login">Free Listing</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-primary " href="#" id="new-button">Login/Signup</a>
-                            </li>
+                            <% if(user) {%>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="manage-business">Manage Business</a>
+
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="logout">Logout</a>
+                                </li>
+                                
+                                <% } else{ %>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="business-login">Free Listing</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="btn btn-primary " href="#" id="new-button">Login/Signup</a>
+                                    </li>
+                                    
+
+                                    <% } %>
                         </ul>
                     </div>
 
@@ -134,7 +147,7 @@
 
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
-                            
+
                             const latitude = position.coords.latitude;
                             const longitude = position.coords.longitude;
                             console.log('Location accessed:', { latitude, longitude });

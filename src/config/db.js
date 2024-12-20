@@ -1,10 +1,10 @@
 import { config } from 'dotenv';
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
 
 config();
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.DB_HOST ,
     user: process.env.DB_USER ,
     password: process.env.DB_PASSWORD,
@@ -13,11 +13,16 @@ const db = mysql.createConnection({
 
 });
 
-db.connect((err)=>{
-    if(err){
-        console.error('error connecting to mysql', err);
-        return;
+
+
+(async () => {
+    try {
+        const connection = await db.getConnection();
+        console.log('Connected to MySQL database');
+        connection.release(); // Release the connection back to the pool
+    } catch (err) {
+        console.error('Error connecting to MySQL:', err);
     }
-    console.log('connected to mysql database');
-})
+})();
+
 export default db;
