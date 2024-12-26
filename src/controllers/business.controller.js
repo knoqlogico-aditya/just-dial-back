@@ -61,15 +61,20 @@ export default class BusinessController {
         if (!req.user) {
             return res.status(401).send('Unauthorized2');
         }
-        const { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput } = req.body;
+        const { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput, website } = req.body;
         if (!businessName || !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
             return res.status(400).send('All fields are required');
         }
         try {
-            const result = await BusinessModel.addBusinessDetails(businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput);
+            const result = await BusinessModel.addBusinessDetails(businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput, website);
             console.log(result);
             const email = req.session.email;
-            await BusinessModel.addBusinessEmail(email, true);
+            await BusinessModel.setOwner(email);
+
+
+            
+            
+
             res.json({ success: true, message: 'Business details added successfully', id: result.insertId });
         }
         catch (error) {
@@ -158,7 +163,7 @@ export default class BusinessController {
                         const businessOwner = await BusinessModel.getBusinessOwnerByEmail(email);
                         console.log(`Business owner: ${businessOwner}`);
 
-                        if (businessOwner) {
+                        if (businessOwner === 'business_owner') {
                             console.log('User already exists');
                             const token = generateToken({ email: email });
                             res.cookie('token', token, {
@@ -192,7 +197,7 @@ export default class BusinessController {
                         maxAge: 24 * 60 * 60 * 1000 // 24 hours
                     });
                     console.log('Token set in cookie2, redirecting to /enter-business-details');
-                    return res.json({ redirectUrl: '/enter-business-details' }); // Redirect to enter-business-details
+                    return res.json({ redirectUrl: '/enter-your-details' }); // Redirect to enter-business-details
                 }
             } catch (error) {
                 console.error('Database error while checking email:', error);
@@ -201,6 +206,19 @@ export default class BusinessController {
         } else {
             console.log('Invalid OTP');
             return res.status(400).send('Invalid OTP. Please try again.'); // Ensure return
+        }
+    }
+
+    async getAllBusinessDetails(req, res) {
+        if (!req.user) {
+            return res.status(401).send('Unauthorized4');
+        }
+        try {
+            const businessDetails = await BusinessModel.getAllBusinessDetails();
+            res.json(businessDetails);
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
 }

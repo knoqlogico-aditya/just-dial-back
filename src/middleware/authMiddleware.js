@@ -5,8 +5,9 @@ const authMiddleware = (req, res, next) => {
     console.log('we are in authenitcation middleware');
     if (!token) {
         console.log('no token found redirecting to login');
-        return res.redirect('/business-login');
         
+        req.user = null;
+        return next();
     }
 
     try {

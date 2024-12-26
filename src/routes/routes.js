@@ -7,7 +7,7 @@ const router = express.Router();
 
 const businessController = new BusinessController();
 
-router.get("/", businessController.showHome)
+router.get("/",authMiddleware, businessController.showHome)
 router.get('/add-name', businessController.showNamePage)
 
 

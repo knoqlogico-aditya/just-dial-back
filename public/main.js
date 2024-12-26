@@ -247,10 +247,10 @@ async function verifyOtp() {
 
 
 }
-async function addNameclient() {
+async function addName() {
     const name = document.getElementById('user-name').value;
     const phone = document.getElementById('user-phone').value;
-    const userType = 'business_owner';
+    const userType = 'customer';
     
     if (!name || !phone || !userType) {
         alert('All fields are required');
@@ -295,13 +295,17 @@ async function addBusinessDetails() {
     
     const latitudeInput = document.getElementById('latitude').value;
     const longitudeInput = document.getElementById('longitude').value;
+    const website = document.getElementById('website').value;
     console.log('latitude================')
 
     if (!businessName|| !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
-        alert('All fields are required');
+        alert('All fields are required except website');
         return;
     }
-
+    const requestBody  = { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput};
+    if (website) {
+        requestBody.website = website;
+    }
     const url = '/list-business';
     try {
         const res = await fetch(url, {
@@ -309,7 +313,7 @@ async function addBusinessDetails() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput })
+            body: JSON.stringify(requestBody)
         });
 
         if (res.ok) {
