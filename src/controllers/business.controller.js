@@ -6,6 +6,23 @@ import { generateToken } from '../utils/jwt.js';
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 export default class BusinessController {
+    async showBusinessBasedOnCategory(req, res){
+        const businesses = await BusinessModel.getAllBusinessDetails();
+        res.render('list-of-businesses', {detail:businesses, user: req.user });
+    }
+    async showOwnListedBusinessList(req, res) {
+        if(!req.user){
+            return res.status(401).send('Unauthorized');
+        }
+        try{
+            const registeredBusiness = await BusinessModel.getRegisteredBusiness(req.user.id);
+            res.render('your-business', { user: req.user, registeredBusiness });
+        }
+        catch(error){
+            console.error('Database error:', error);
+            res.status(500).json({ error: "Failed to fetch business details" });
+        }
+    }
     showNamePage(req, res) {
         if(!req.user){
             return res.status(401).send('Unauthorizd');
@@ -32,8 +49,9 @@ export default class BusinessController {
 
     }
     businessLogin(req, res) {
+
         // console.log(generateOTP());
-        res.render('business-login', {user: req.user , message: null })
+        res.render('business-login', {user: req.user , message: null})
 
     }
     async addNameDetails(req, res) {
@@ -72,10 +90,10 @@ export default class BusinessController {
             await BusinessModel.setOwner(email);
 
 
-            
+            console.log(`business id is ${result.id}`);
             
 
-            res.json({ success: true, message: 'Business details added successfully', id: result.insertId });
+            res.json({ success: true, message: 'Business details added successfully', id: result.id });
         }
         catch (error) {
             console.error('Database error:', error);
@@ -89,11 +107,13 @@ export default class BusinessController {
         const email = req.session.email;
         res.render('verify', { email , user: null });
     }
-    showManageBusiness(req, res) {
+    async showManageBusiness(req, res) {
         if (!req.user) {
             return res.status(401).send('Unauthorized3');
         }
-        res.render('manage-business', {user: req.user });
+        const business =await BusinessModel.getBusinessDetailsById(req.params.id);
+        console.log(business);
+        res.render('manage-business', {user: req.user , business:business, email: req.session.email || null});
     }
     showEnterBusinessDetails(req, res) {
 
@@ -152,6 +172,12 @@ export default class BusinessController {
 
         if (req.session.otp === otp) {
             console.log('OTP is valid');
+            const token = generateToken({ email: req.session.email });
+            res.cookie('token', token, {   
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 24 * 60 * 60 * 1000 // 24 hours
+            });
             req.session.otp = null;
             const email = req.session.email;
             console.log(`The email is ${email}`);
@@ -160,22 +186,17 @@ export default class BusinessController {
                 console.log(`Email is present: ${emailIsPresent}`);
                 if (emailIsPresent) {
                     try {
-                        const businessOwner = await BusinessModel.getBusinessOwnerByEmail(email);
-                        console.log(`Business owner: ${businessOwner}`);
+                        const {user_type, user_id} = await BusinessModel.getUserByEmail(email);
+                        // console.log(`Business owner: ${businessOwner}`);
 
-                        if (businessOwner === 'business_owner') {
+                        if (user_type === 'business_owner') {
                             console.log('User already exists');
-                            const token = generateToken({ email: email });
-                            res.cookie('token', token, {
-                                httpOnly: true,
-                                secure: process.env.NODE_ENV === 'production',
-                                maxAge: 24 * 60 * 60 * 1000 // 24 hours
-                            });
+                            
                             console.log('Token set in cookie, redirecting to /manage-business');
-                            return res.json({ redirectUrl: '/manage-business' }); // Redirect to manage-business
+                            return res.json({ redirectUrl: '/manage-business/user_id='+ user_id}); // Redirect to manage-business
                         } else {
                             console.log('No matching records found');
-                            const token = generateToken({ email: email });
+                            const token = generateToken({ email: email, user_id });
                             res.cookie('token', token, {
                                 httpOnly: true,
                                 secure: process.env.NODE_ENV === 'production',
@@ -190,13 +211,8 @@ export default class BusinessController {
                     }
                 } else {
                     console.log('Email not present');
-                    const token = generateToken({ email: email });
-                    res.cookie('token', token, {
-                        httpOnly: true,
-                        secure: process.env.NODE_ENV === 'production',
-                        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-                    });
-                    console.log('Token set in cookie2, redirecting to /enter-business-details');
+                    
+                    console.log('Token set in cookie2, redirecting to /enter-your-details');
                     return res.json({ redirectUrl: '/enter-your-details' }); // Redirect to enter-business-details
                 }
             } catch (error) {
@@ -207,6 +223,19 @@ export default class BusinessController {
             console.log('Invalid OTP');
             return res.status(400).send('Invalid OTP. Please try again.'); // Ensure return
         }
+    }
+    async showBusinessDetails(req, res) {
+        const businessId = req.params.id;
+        try {
+            const business = await BusinessModel.getBusinessDetailsById(businessId);
+        }
+        catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ error: "Failed to fetch business details" });
+        }
+        res.render('business-details', { user: req.user|| null});
+
+
     }
 
     async getAllBusinessDetails(req, res) {
@@ -221,4 +250,33 @@ export default class BusinessController {
             res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
+    async searchCategory(req, res) {
+        const category = req.query.category;
+        if (!category) {
+            return res.status(400).send('category parameter is required');
+        }
+        try {
+            const businesses = await BusinessModel.getBusinessesByCategory(category);
+            res.render('list-of-businesses', { user: req.user, businesses });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ error: "Failed to fetch business details" });
+        }
+    }
+    async showBusinessDetailsById(req, res) {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).send('Query parameter is required');
+        }
+        try {
+            const businessDetails = await BusinessModel.getBusinessDetailsById(id);
+
+            
+            res.render('business-details', { user: req.user, businessDetails });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ error: "Failed to search business details" });
+        }
+    }
+    
 }

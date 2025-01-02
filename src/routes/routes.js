@@ -14,10 +14,14 @@ router.get('/add-name', businessController.showNamePage)
 
 router.get('/business-login', businessController.businessLogin)
 router.get('/verify-otp', businessController.getVerifyOtpPage)
-router.get('/manage-business',authMiddleware , businessController.showManageBusiness)
+router.get('/manage-business/:id',authMiddleware, businessController.showManageBusiness)
 router.get('/enter-business-details',authMiddleware, businessController.showEnterBusinessDetails)
 router.get('/logout', businessController.logout)
 router.get('/enter-your-details',authMiddleware, businessController.showNamePage)
+router.get('your-business',authMiddleware, businessController.showOwnListedBusinessList)
+router.get('/restaurants', businessController.showBusinessBasedOnCategory)
+router.get('/business-details/:id', businessController.showBusinessDetailsById)
+router.get('/search-category', businessController.searchCategory);
 
 router.post('/enter-your-details', businessController.addNameDetails)
 router.post('/show-business', businessController.showBusiness)

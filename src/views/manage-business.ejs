@@ -1,90 +1,113 @@
-<div class="container mt-5">
-    <h1 class="text-center">Manage Your Business</h1>
+<% if(!business){ %>
+    <div class="alert alert-danger" role="alert">
+        You have not entered your business details yet. Please enter your business details to continue.
+    </div>
+    <% } %>
+        <div class="container mt-5">
+            <h1 class="text-center">Manage Your Business</h1>
 
-    <!-- Card with tabs for different sections -->
-    <div class="card">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" id="businessTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="details-tab" data-bs-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="true">Business Details</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products" role="tab" aria-controls="products" aria-selected="false">Manage Products</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="feedback-tab" data-bs-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Feedback</a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body">
-            <div class="tab-content" id="businessTabsContent">
-                <!-- Business Details Tab -->
-                <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-                    <h4>Business Information</h4>
-                    <form>
-                        <div class="mb-3">
-                            <label for="businessName" class="form-label">Business Name</label>
-                            <input type="text" class="form-control" id="businessName" placeholder="Enter business name" value="<% business.name%>">
-                        </div>
-                        <div class="mb-3">
-                            <label for="businessEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="businessEmail" placeholder="Enter business email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="businessAddress" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="businessAddress" placeholder="Enter business address">
-                        </div>
-                        <div class="mb-3">
-                            <label for="businessPhone" class="form-label">Phone</label>
-                            <input type="text" class="form-control" id="businessPhone" placeholder="Enter business phone">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </form>
+            <!-- Card with tabs for different sections -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="businessTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="details-tab" data-bs-toggle="tab" href="#details" role="tab"
+                                aria-controls="details" aria-selected="true">Business Details</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products" role="tab"
+                                aria-controls="products" aria-selected="false">Update Contact Info</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="feedback-tab" data-bs-toggle="tab" href="#feedback" role="tab"
+                                aria-controls="feedback" aria-selected="false">Reviews</a>
+                        </li>
+                    </ul>
                 </div>
+                <div class="card-body">
+                    <div class="tab-content" id="businessTabsContent">
+                        <!-- Business Details Tab -->
+                        <div class="tab-pane fade show active" id="details" role="tabpanel"
+                            aria-labelledby="details-tab">
+                            <h4>Business Information</h4>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="businessName" class="form-label">Business Name</label>
+                                    <input type="text" class="form-control" id="businessName"
+                                        placeholder="Enter business name" value="<%= business.business_name %>">
+                                </div>
 
-                <!-- Manage Products Tab -->
-                <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
-                    <h4>Manage Products</h4>
-                    <p>Add, remove, or edit products/services offered by your business.</p>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Product/Service</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Example Product -->
-                                <tr>
-                                    <td>Example Product</td>
-                                    <td>$20.00</td>
-                                    <td>
-                                        <button class="btn btn-warning btn-sm">Edit</button>
-                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-success">Add New Product</button>
-                </div>
+                                <div class="mb-3">
+                                    <label for="businessAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="businessAddress"
+                                        placeholder="Enter business address" value="<%= business.address %>">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pincode" class="form-label">Pincode</label>
+                                    <input type="number" class="form-control" id="pincode" placeholder="Enter Pincode"
+                                        value="<%= business.pincode %>">
+                                </div>
+                                <!-- City -->
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city" name="city"
+                                        value="<%= business.city %>" required>
+                                </div>
 
-                <!-- Feedback Tab -->
-                <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
-                    <h4>Customer Feedback</h4>
-                    <div class="list-group">
-                        <!-- Example Feedback -->
-                        <a href="#" class="list-group-item list-group-item-action">
-                            <h5 class="mb-1">Customer Name</h5>
-                            <p class="mb-1">Great service, highly recommend!</p>
-                            <small>Rating: ★★★★☆</small>
-                        </a>
+                                <!-- State -->
+                                <div class="mb-3">
+                                    <label for="state" class="form-label">State</label>
+                                    <input type="text" class="form-control" id="state" name="state"
+                                        value="<%= business.state %>" required>
+                                </div>
+                                <!-- Category -->
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Category</label>
+                                    <input type="text" class="form-control" id="business-category" name="category" value="<%= business.category %>"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="businessPhone" class="form-label">Phone</label>
+                                    <input type="text" class="form-control" id="businessPhone"
+                                        placeholder="Enter business phone" value="<%= business.phone %>">
+                                </div>
+
+                                <!-- Website -->
+                                <div class="mb-3">
+                                    <label for="website" class="form-label">Website</label>
+                                    <input type="text" class="form-control" id="website" value="<%= business.website %>" name="website">
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+
+                        <!-- update email Tab -->
+                        <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
+                            <h4>Update Email</h4>
+
+                            <div class="table-responsive">
+                                <input type="email" class="form-control mb-3" placeholder="Enter updated email" value="<%= email %>"
+                                    id="newEmail">
+                            </div>
+                            <button class="btn btn-success" onclick="updateEmail()">Send Otp</button>
+                        </div>
+
+                        <!-- Reviews Tab -->
+                        <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+                            <h4>Customer Feedback</h4>
+                            <div class="list-group">
+                                <!-- Example Feedback -->
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <h5 class="mb-1">Customer Name</h5>
+                                    <p class="mb-1">Great service, highly recommend!</p>
+                                    <small>Rating: ★★★★☆</small>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-</div>
+        </div>

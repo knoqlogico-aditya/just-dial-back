@@ -75,7 +75,7 @@
                         <ul class="navbar-nav ms-auto">
                             <% if(user) {%>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="manage-business">Manage Business</a>
+                                    <a class="nav-link" href="your-business">Manage Business</a>
 
                                 </li>
                                 <li class="nav-item">
@@ -112,24 +112,30 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="loginModalLabel">Enter Your Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form id="details-form">
                             <!-- Name -->
                             <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="user-name" name="name" required>
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <button id="sendOtpButton" type="button" onclick="sendOtp()">Send OTP</button>
                             </div>
 
-                            <!-- Phone -->
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" id="user-phone" name="phone" required>
+                            <!-- enter otp -->
+                            
+                        
+                            <div id="verify-otp-box" class="mb-3 d-none">
+                                <p>We have sent an OTP to <span id="otp-email"></span>
+                                <label for="otp">Enter OTP:</label>
+                                <input type="text" id="otp" name="otp" required />
+                                <button type="button" onclick="verifyOtp()">Verify</button>
                             </div>
 
-                            <!-- Submit Button -->
-                            <button type="button" class="btn btn-primary" onclick="addName()">Submit</button>
+                          
+
                         </form>
                     </div>
                 </div>

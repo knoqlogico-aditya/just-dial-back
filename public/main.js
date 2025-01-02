@@ -165,7 +165,12 @@ pincodeInput.addEventListener('input', async () => {
 // send otp
 async function sendOtp() {
     console.log('send otp');
+    const verifyOtpBox = document.getElementById('verify-otp-box');
+   
+    const otpEmail = document.getElementById('otp-email');
     const email = document.getElementById('email').value;
+    
+    
 
     if (!email) {
         alert('Email is required');
@@ -190,7 +195,10 @@ async function sendOtp() {
 
         if (res.ok) {
             // Redirect to verification page if OTP is sent successfully
-            window.location.href = '/verify-otp';
+            alert('OTP sent successfully');
+            otpEmail.textContent = email;
+            verifyOtpBox.classList.remove('d-none');
+            button.textContent = 'OTP Sent';
         } else {
             // Handle failure
             alert('Failed to send OTP. Please try again.');
@@ -246,6 +254,44 @@ async function verifyOtp() {
 
 
 
+}
+async function verifyOtpHandlerCustomer() {
+    const otp = document.getElementById('otp-btn-customer').value;
+    if (!otp) {
+        alert('Please enter the OTP');
+        return;
+    }
+
+    const url = '/verify-otp-customer';
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ otp })
+
+        })
+        if (res.ok) {
+            const data = await res.json();
+            alert('OTP verified successfully');
+            // Redirect to the appropriate page based on the response
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+
+               
+            } else {
+                const errorData = await res.json();
+                alert(`Failed to verify OTP: ${errorData.message}`);
+            }
+
+        }
+    }
+
+    catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while verifying OTP');
+    }
 }
 async function addName() {
     const name = document.getElementById('user-name').value;

@@ -1,0 +1,27 @@
+<div class="container my-5">
+    <h1 class="text-center mb-4">Your Listed Businesses</h1>
+    <div class="row">
+        <% if (registeredBusiness && registeredBusiness.length > 0) { %>
+            <% registeredBusiness.forEach(business => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= business.name %></h5>
+                            <p class="card-text"><strong>Category:</strong> <%= business.category %></p>
+                            <p class="card-text"><strong>Phone:</strong> <%= business.phone %></p>
+                            <p class="card-text"><strong>Location:</strong> <%= business.city %>, <%= business.state %> - <%= business.pincode %></p>
+                            <% if (business.website) { %>
+                                <p class="card-text"><strong>Website:</strong> <a href="<%= business.website %>" target="_blank"><%= business.website %></a></p>
+                            <% } %>
+                            <p class="card-text"><strong>Coordinates:</strong> <%= business.latitude %>, <%= business.longitude %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-12">
+                <p class="text-center">No registered businesses found.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
