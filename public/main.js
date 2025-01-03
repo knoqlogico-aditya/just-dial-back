@@ -375,4 +375,9 @@ async function addBusinessDetails() {
         alert('An error occurred while adding business details');
 
     }
+
+}
+//  image in click
+function setModalImage(imageSrc) {
+    document.getElementById('modalImage').src = imageSrc;
 }

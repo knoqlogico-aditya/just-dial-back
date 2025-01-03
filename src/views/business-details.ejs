@@ -1,16 +1,57 @@
+
 <div class="container mt-4">
-    <div class="row">
-        <h2>All Photos Restaurant</h2>
-        <div class="col-md-4">
-          <img src="" alt="Photos 1" class="img-fluid mb-3">
+  <div class="row">
+    <h2 class="text-center my-4">All Photos Restaurant</h2>
+    <!-- Horizontal Scrollable Container -->
+    <div class="d-flex overflow-auto align-items-center">
+        <div class="flex-shrink-0 me-1">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsKPIssWvJmg9HTqYBNmDP9oImx7NQNIS7g&s" alt="Image 1" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
+            </a>
         </div>
-        <div class="col-md-4">
-          <img src="" alt="Photos 2" class="img-fluid mb-3">
+        <div class="flex-shrink-0 me-1">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaXo3tkYzRGOhSuTe8RQexHHSH7onZLNj5g&s')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaXo3tkYzRGOhSuTe8RQexHHSH7onZLNj5g&s" alt="Image 2" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
+            </a>
         </div>
-        <div class="col-md-4">
-          <img src="" alt="Photos 3" class="img-fluid mb-3">
+        <div class="flex-shrink-0 me-1">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsKPIssWvJmg9HTqYBNmDP9oImx7NQNIS7g&s" alt="Image 3" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
+            </a>
+        </div>
+        <div class="flex-shrink-0 me-1">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaXo3tkYzRGOhSuTe8RQexHHSH7onZLNj5g&s" alt="Image 4" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
+            </a>
+        </div>
+        <div class="flex-shrink-0">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsKPIssWvJmg9HTqYBNmDP9oImx7NQNIS7g&s" alt="Image 5" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
+            </a>
         </div>
     </div>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="imageSrc" alt="Full Image" class="img-fluid rounded" width="100%">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <!-- Header Section -->
 <div class="row align-items-center mt-4">
   <div class="col-md-8">
@@ -31,7 +72,12 @@
 </div>
 
 <!-- Tabs Section -->
-<ul class="nav nav-tabs mt-4 sticky-tabs" id="myTab" role="tablist">
+<ul 
+ style="position:sticky;
+ top:72px;
+ background-color: white;
+ /* border-bottom: 1px solid black; */
+ " class="nav nav-tabs mt-4 sticky-tabs p-2" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <a href="#overview" class="nav-link active" id="overview-tab">Overview</a>
   </li>
@@ -56,7 +102,7 @@
 </ul>
 
 <!-- Tab Content -->
-<div class="tab-content mt-4" id="myTabContent">
+<div class="tab-content mt-4 p-5" id="myTabContent">
   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
     <h3>Overview</h3>
     <p>Welcome to our restaurant! We offer the best culinary experience in Dehradun.</p>

@@ -44,9 +44,9 @@ html, body {
     font-size: 16px;
     color: var(--secondary-font-color);
 }
-#searchBtn{
+/* #searchBtn{
     font-size: 14px;
-}
+} */
 #searchBtn svg {
     font-size: 14px;
 }
@@ -158,6 +158,7 @@ html, body {
     display: none;
     top: 100%;
     left: 0;
+    margin: 10px;;
     width: 100%;
     background: #fff;
     border: 1px solid #ccc;
@@ -473,7 +474,9 @@ input#Email {
 div>button {
     background: #ff5722;
     color: #fff;
-    padding: 10px 15px;
+    margin:8px;
+    margin-left:20px;
+    padding: 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -612,7 +615,7 @@ input#email {
     border: 1px solid #ccc; 
     border-radius: 5px;
     flex: 1;
-    max-width: 300px;
+    max-width: 600px;
 }
 
 .get-started-btn {

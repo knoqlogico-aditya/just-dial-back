@@ -29,4 +29,5 @@ router.post('/send-otp', businessController.sendOtp);
 router.post('/verify-otp', businessController.verifyOtpHandler);
 router.post('/list-business',authMiddleware, businessController.addBusinessDetails);
 
+
 export default router;
