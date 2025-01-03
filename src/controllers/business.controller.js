@@ -84,16 +84,15 @@ export default class BusinessController {
             return res.status(400).send('All fields are required');
         }
         try {
-            const result = await BusinessModel.addBusinessDetails(businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput, website);
-            console.log(result);
+            const userId = await BusinessModel.addBusinessDetails(businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput, website);
+           
             const email = req.session.email;
             await BusinessModel.setOwner(email);
+            const redirectUrl = `/manage-business/${userId}`;
 
-
-            console.log(`business id is ${result.id}`);
             
 
-            res.json({ success: true, message: 'Business details added successfully', id: result.id });
+            res.json({redirectUrl,success: true, message: 'Business details added successfully',  });
         }
         catch (error) {
             console.error('Database error:', error);
@@ -154,7 +153,10 @@ export default class BusinessController {
         try {
             await transporter.sendMail(mailOptions);
 
-            res.status(200).json({ success: true, message: 'OTP sent successfully' });
+            
+            const emailIsPresent = await BusinessModel.getEmail(email); 
+            console.log(`email status in send otp is email is present: ${emailIsPresent}`);
+            res.status(200).json({ success: true, message: 'OTP sent successfully', emailIsPresent });
 
         } catch (error) {
             console.error(error);
@@ -170,6 +172,8 @@ export default class BusinessController {
             return res.status(400).send('OTP is required');
         }
 
+
+
         if (req.session.otp === otp) {
             console.log('OTP is valid');
             const token = generateToken({ email: req.session.email });
@@ -181,44 +185,54 @@ export default class BusinessController {
             req.session.otp = null;
             const email = req.session.email;
             console.log(`The email is ${email}`);
-            try {
-                const emailIsPresent = await BusinessModel.getEmail(email);
-                console.log(`Email is present: ${emailIsPresent}`);
-                if (emailIsPresent) {
-                    try {
-                        const {user_type, user_id} = await BusinessModel.getUserByEmail(email);
-                        // console.log(`Business owner: ${businessOwner}`);
+            
+            const emailIsPresent = await BusinessModel.getEmail(email);
+            if(emailIsPresent){
+                try {
+                    const {user_type, user_id} = await BusinessModel.getUserByEmail(email);
+                    // console.log(`Business owner: ${businessOwner}`);
 
-                        if (user_type === 'business_owner') {
-                            console.log('User already exists');
-                            
-                            console.log('Token set in cookie, redirecting to /manage-business');
-                            return res.json({ redirectUrl: '/manage-business/user_id='+ user_id}); // Redirect to manage-business
-                        } else {
-                            console.log('No matching records found');
-                            const token = generateToken({ email: email, user_id });
-                            res.cookie('token', token, {
-                                httpOnly: true,
-                                secure: process.env.NODE_ENV === 'production',
-                                maxAge: 24 * 60 * 60 * 1000 // 24 hours
-                            });
-                            console.log('Token set in cookie, redirecting to /enter-business-details');
-                            return res.json({ redirectUrl: '/enter-business-details' }); // Redirect to enter-business-details
-                        }
-                    } catch (error) {
-                        console.error('Database error while fetching business owner:', error);
-                        return res.status(500).send('An error occurred while checking the email'); // Ensure return
+                    if (user_type === 'business_owner') {
+                        console.log('User is business owner');
+                        
+                        console.log('Token set in cookie, redirecting to /manage-business');
+                        return res.json({ redirectUrl: '/manage-business/user_id='+ user_id}); // Redirect to manage-business
+                    } else {
+                        console.log('user is the customer');
+                        const token = generateToken({ email: email, user_id });
+                        res.cookie('token', token, {
+                            httpOnly: true,
+                            secure: process.env.NODE_ENV === 'production',
+                            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                        });
+                        console.log('Token set in cookie, redirecting to /enter-business-details');
+                        return res.json({ redirectUrl: '/enter-business-details' }); // Redirect to enter-business-details
                     }
-                } else {
-                    console.log('Email not present');
-                    
-                    console.log('Token set in cookie2, redirecting to /enter-your-details');
-                    return res.json({ redirectUrl: '/enter-your-details' }); // Redirect to enter-business-details
+                } catch (error) {
+                    console.error('Database error while fetching business owner:', error);
+                    return res.status(500).send('An error occurred while checking the email'); // Ensure return
                 }
-            } catch (error) {
-                console.error('Database error while checking email:', error);
-                return res.status(500).send('An error occurred while checking the email'); // Ensure return
+
+            }else{
+                const email = req.session.email;
+                const user_type = 'customer';
+                const{userName, userPhone} = req.body;
+                console.log(`The email is ${email}, the name is ${userName}, the phone is ${userPhone}`);
+                try {
+                    const result = await BusinessModel.insertNameDetails(userName, email, userPhone, user_type);
+                    console.log(result);
+                    res.json({ redirectUrl: '/enter-business-details', success: true, message: 'name added successfully!', id: result.insertId });
+                } catch (error) {
+                    console.error('Database error:', error);
+                    res.status(500).json({ success: false, message: 'Failed to add business' });
+                }
             }
+           
+                
+                
+                    
+                
+            
         } else {
             console.log('Invalid OTP');
             return res.status(400).send('Invalid OTP. Please try again.'); // Ensure return

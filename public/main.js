@@ -194,17 +194,45 @@ async function sendOtp() {
         });
 
         if (res.ok) {
-            // Redirect to verification page if OTP is sent successfully
+            const data = await res.json();
+
             alert('OTP sent successfully');
             otpEmail.textContent = email;
             verifyOtpBox.classList.remove('d-none');
             button.textContent = 'OTP Sent';
+
+            if (data.emailIsPresent) {
+                alert('Email is already present');
+                // Do nothing as the email already exists
+            } else {
+                alert('Email is not present');
+
+                // Create input fields for name and phone
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.id = 'user-name';
+                nameInput.classList.add('form-control', 'mt-3');
+                nameInput.placeholder = 'Enter your name';
+                nameInput.required = true;
+
+                const phoneInput = document.createElement('input');
+                phoneInput.type = 'tel';
+                phoneInput.id = 'user-phone';
+                phoneInput.classList.add('form-control', 'mt-3');
+                phoneInput.placeholder = 'Enter your phone number';
+                phoneInput.pattern = '[0-9]{10}';
+                phoneInput.title = 'Phone number should be 10 digits';
+                phoneInput.required = true;
+
+                verifyOtpBox.appendChild(nameInput);
+                verifyOtpBox.appendChild(phoneInput);
+            }
         } else {
-            // Handle failure
             alert('Failed to send OTP. Please try again.');
             button.disabled = false;
             button.textContent = 'Send OTP';
         }
+
     } catch (error) {
         console.error('Error:', error);
         alert('An error occurred. Please try again later.');
@@ -216,6 +244,12 @@ async function sendOtp() {
 
 async function verifyOtp() {
     const otp = document.getElementById('otp').value;
+    const nameInput =  document.getElementById('user-name');
+    const phoneInput = document.getElementById('user-phone');
+
+    const userName = nameInput ? nameInput.value : null;
+    const userPhone = phoneInput ? phoneInput.value : null;
+    
     if (!otp) {
         alert('Please enter the OTP');
         return;
@@ -228,7 +262,7 @@ async function verifyOtp() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ otp })
+            body: JSON.stringify({ otp, userName, userPhone })
 
         })
         if (res.ok) {
@@ -297,6 +331,7 @@ async function addName() {
     const name = document.getElementById('user-name').value;
     const phone = document.getElementById('user-phone').value;
     const userType = 'customer';
+
     
     if (!name || !phone || !userType) {
         alert('All fields are required');
@@ -365,7 +400,7 @@ async function addBusinessDetails() {
         if (res.ok) {
             const data = await res.json();
             alert('Business details added successfully');
-            window.location.href = '/manage-business';
+            window.location.href = data.redirectUrl;
         } else {
             const errorData = await res.json();
             alert(`Failed to add business: ${errorData.message}`);
