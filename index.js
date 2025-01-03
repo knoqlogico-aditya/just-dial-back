@@ -5,11 +5,11 @@ import BusinessController from "./src/controllers/business.controller.js"
 import route from './src/routes/routes.js'
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-
+import dotenv from 'dotenv';
 
 
 const server = express();
-const PORT = "3100";
+const PORT = process.env.PORT || "3100";
 
 // middleware
 server.use(cookieParser());
