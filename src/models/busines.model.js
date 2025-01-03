@@ -52,7 +52,8 @@ export default class BusinessModel {
             'INSERT INTO business_details (business_name, pincode, city, state, category, phone, latitude, longitude, website) VALUES (?,?,?,?,?,?,?,?,?)',
             [businessName, pincode, city, state, category, phone, latitude, longitude, website || null]
         );
-        return result;
+        const userId = result.insertId; 
+        return userId;
     }
     static async getAllBusinessDetails() {
         const [rows] = await db.execute('SELECT * FROM business_details');
@@ -83,20 +84,20 @@ export default class BusinessModel {
 
     }
     static async getBusinessDetailsById(businessId) {
-        try{
+        try {
             const [rows] = await db.execute('SELECT * FROM business_details WHERE id = ?', [businessId]);
-            return rows.lenght>0 ? rows[0] : null;
+            return rows.lenght > 0 ? rows[0] : null;
 
-            
-            
+
+
         }
-        catch(error){
+        catch (error) {
             console.error('Error fetching business details by id:', error);
             throw error;
         }
 
 
-        
+
     }
 
 
