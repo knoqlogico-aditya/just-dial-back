@@ -166,11 +166,11 @@ pincodeInput.addEventListener('input', async () => {
 async function sendOtp() {
     console.log('send otp');
     const verifyOtpBox = document.getElementById('verify-otp-box');
-   
+
     const otpEmail = document.getElementById('otp-email');
     const email = document.getElementById('email').value;
-    
-    
+
+
 
     if (!email) {
         alert('Email is required');
@@ -239,17 +239,94 @@ async function sendOtp() {
         button.disabled = false;
         button.textContent = 'Send OTP';
     }
+} 
+async function sendOtpPopup() {
+    console.log('send otp');
+    const verifyOtpBox = document.getElementById('verify-otp-box');
+
+    const otpEmail = document.getElementById('otp-email');
+    const email = document.getElementById('email').value;
+
+
+
+    if (!email) {
+        alert('Email is required');
+        return;
+    }
+
+    const button = document.getElementById('sendOtpButton');
+    button.disabled = true;
+    button.textContent = 'Sending...';
+
+    const url = '/send-otp';
+
+    try {
+        // Use await to wait for the fetch request to complete
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+
+            alert('OTP sent successfully');
+            otpEmail.textContent = email;
+            verifyOtpBox.classList.remove('d-none');
+            button.textContent = 'OTP Sent';
+
+            if (data.emailIsPresent) {
+                alert('Email is already present');
+                // Do nothing as the email already exists
+            } else {
+                alert('Email is not present');
+
+                // Create input fields for name and phone
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.id = 'user-name-pop';
+                nameInput.classList.add('form-control', 'mt-3');
+                nameInput.placeholder = 'Enter your name';
+                nameInput.required = true;
+
+                const phoneInput = document.createElement('input');
+                phoneInput.type = 'tel';
+                phoneInput.id = 'user-phone-pop';
+                phoneInput.classList.add('form-control', 'mt-3');
+                phoneInput.placeholder = 'Enter your phone number';
+                phoneInput.pattern = '[0-9]{10}';
+                phoneInput.title = 'Phone number should be 10 digits';
+                phoneInput.required = true;
+
+                verifyOtpBox.appendChild(nameInput);
+                verifyOtpBox.appendChild(phoneInput);
+            }
+        } else {
+            alert('Failed to send OTP. Please try again.');
+            button.disabled = false;
+            button.textContent = 'Send OTP';
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+        button.disabled = false;
+        button.textContent = 'Send OTP';
+    }
 }
 
 
 async function verifyOtp() {
     const otp = document.getElementById('otp').value;
-    const nameInput =  document.getElementById('user-name');
+    const nameInput = document.getElementById('user-name');
     const phoneInput = document.getElementById('user-phone');
 
     const userName = nameInput ? nameInput.value : null;
     const userPhone = phoneInput ? phoneInput.value : null;
-    
+
     if (!otp) {
         alert('Please enter the OTP');
         return;
@@ -272,12 +349,11 @@ async function verifyOtp() {
             if (data.redirectUrl) {
                 window.location.href = data.redirectUrl;
 
-               
+
             } else {
                 const errorData = await res.json();
                 alert(`Failed to verify OTP: ${errorData.message}`);
             }
-
         }
     }
 
@@ -289,21 +365,28 @@ async function verifyOtp() {
 
 
 }
-async function verifyOtpHandlerCustomer() {
-    const otp = document.getElementById('otp-btn-customer').value;
+async function verifyOtpPopup() {
+    const otp = document.getElementById('otp-pop').value;
+    const nameInput = document.getElementById('user-name-pop');
+    const phoneInput = document.getElementById('user-phone-pop');
+
+    const userName = nameInput ? nameInput.value : null;
+    const userPhone = phoneInput ? phoneInput.value : null;
+
+
     if (!otp) {
         alert('Please enter the OTP');
         return;
     }
 
-    const url = '/verify-otp-customer';
+    const url = '/verify-otp-pop';
     try {
         const res = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ otp })
+            body: JSON.stringify({ otp, userName, userPhone })
 
         })
         if (res.ok) {
@@ -313,12 +396,11 @@ async function verifyOtpHandlerCustomer() {
             if (data.redirectUrl) {
                 window.location.href = data.redirectUrl;
 
-               
+
             } else {
                 const errorData = await res.json();
                 alert(`Failed to verify OTP: ${errorData.message}`);
             }
-
         }
     }
 
@@ -326,13 +408,14 @@ async function verifyOtpHandlerCustomer() {
         console.error('Error:', error);
         alert('An error occurred while verifying OTP');
     }
+
 }
 async function addName() {
     const name = document.getElementById('user-name').value;
     const phone = document.getElementById('user-phone').value;
     const userType = 'customer';
 
-    
+
     if (!name || !phone || !userType) {
         alert('All fields are required');
         return;
@@ -355,7 +438,7 @@ async function addName() {
             const errorData = await res.json();
             alert(`Failed to add name: ${errorData.message}`);
         }
-    }catch (error) {    
+    } catch (error) {
         console.error('Error:', error);
         alert('An error occurred while adding name');
     }
@@ -371,19 +454,19 @@ async function addBusinessDetails() {
 
     const phone = document.getElementById('phone').value;
     // const email = document.getElementById('email').value;
-    
-    
-    
+
+
+
     const latitudeInput = document.getElementById('latitude').value;
     const longitudeInput = document.getElementById('longitude').value;
     const website = document.getElementById('website').value;
     console.log('latitude================')
 
-    if (!businessName|| !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
+    if (!businessName || !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
         alert('All fields are required except website');
         return;
     }
-    const requestBody  = { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput};
+    const requestBody = { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput };
     if (website) {
         requestBody.website = website;
     }

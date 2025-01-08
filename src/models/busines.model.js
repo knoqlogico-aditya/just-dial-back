@@ -16,7 +16,7 @@ export default class BusinessModel {
             throw error; // Propagate the error
         }
     }
-    static async getRegisteredBusiness(userId) {
+    static async getListedBusinessesByUserId(userId) {
         try {
             const [rows] = await db.execute('SELECT * FROM business_details WHERE user_id = ?', [userId]);
             return rows;
@@ -38,22 +38,36 @@ export default class BusinessModel {
     //     const [result]= await db.execute('INSERT INTO email_table (email, business_owner) values(?,?)',[email, businessOwner])
     //     return result.insertId;
     // }
-    static async setOwner(email) {
-        const [result] = await db.execute('UPDATE users SET user_type = "business_owner" WHERE email = ?', [email]);
-        return result;
+    static async setOwner(userId) {
+        try {
+            // Ensure the user_id exists and update the user_type to "business_owner"
+            const [result] = await db.execute('UPDATE users SET user_type = "business_owner" WHERE user_id = ?', [userId]);
+            
+            // Check if the update was successful by checking the affected rows
+            if (result.affectedRows > 0) {
+                console.log(`User with ID ${userId} is now a business owner.`);
+                return result; // Return the result of the update
+            } else {
+                throw new Error(`User with ID ${userId} not found or update failed.`);
+            }
+        } catch (error) {
+            console.error('Error setting business owner:', error);
+            throw error; // Rethrow the error so it can be handled at the controller level
+        }
     }
     static async insertNameDetails(name, email, phone, userType) {
         const [result] = await db.execute('INSERT INTO users (name,email, phone_number, user_type) VALUES (?,?,?,?)', [name, email, phone, userType]);
         return result;
     }
-    static async addBusinessDetails(businessName, pincode, city, state, category, phone, latitude, longitude, website) {
+    static async addBusinessDetails(userId, businessName, pincode, city, state, category, phone, latitude, longitude, website) {
         console.log('inside addBusinessDetails');
+        console.log(`userId: ${userId}, businessName: ${businessName}, pincode: ${pincode}, city: ${city}, state: ${state}, category: ${category}, phone: ${phone}, latitude: ${latitude}, longitude: ${longitude}, website: ${website}`);
         const [result] = await db.execute(
-            'INSERT INTO business_details (business_name, pincode, city, state, category, phone, latitude, longitude, website) VALUES (?,?,?,?,?,?,?,?,?)',
-            [businessName, pincode, city, state, category, phone, latitude, longitude, website || null]
+            'INSERT INTO business_details (user_id, business_name, pincode, city, state, category, phone, latitude, longitude, website) VALUES (?,?,?,?,?,?,?,?,?,?)',
+            [userId, businessName, pincode, city, state, category, phone, latitude, longitude, website || null]
         );
-        const userId = result.insertId; 
-        return userId;
+        
+        return result;
     }
     static async getAllBusinessDetails() {
         const [rows] = await db.execute('SELECT * FROM business_details');

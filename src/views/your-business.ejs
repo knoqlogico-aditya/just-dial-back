@@ -14,6 +14,7 @@
                                 <p class="card-text"><strong>Website:</strong> <a href="<%= business.website %>" target="_blank"><%= business.website %></a></p>
                             <% } %>
                             <p class="card-text"><strong>Coordinates:</strong> <%= business.latitude %>, <%= business.longitude %></p>
+                            <a href="/manage-business/<%= business.id %>">edit business</a>
                         </div>
                     </div>
                 </div>

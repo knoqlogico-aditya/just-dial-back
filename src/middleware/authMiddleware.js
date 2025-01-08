@@ -2,6 +2,7 @@ import { verifyToken } from '../utils/jwt.js';
 import db from "../config/db.js";
 
 const authMiddleware = async (req, res, next) => {
+    
     const token = req.cookies['token'];
     console.log('we are in authenitcation middleware');
     if (!token) {
